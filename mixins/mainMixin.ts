@@ -62,7 +62,7 @@ export default defineComponent({
     ];
     
     return {
-      mmDeepLink: "https://metamask.app.link/dapp/fhenix-demo.pages.dev",
+      mmDeepLink: "https://demo.fhenix.zone",
       enableEncryption: false,
       encryptionOn: encryptionOn,
       showEncryptionAnimation: false,
