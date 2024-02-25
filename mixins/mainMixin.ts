@@ -199,17 +199,27 @@ export default defineComponent({
     async connect() {
       let chainId = '0x' + (Number(appConfig.CHAIN_ID)).toString(16);
       //chainId = ethers.utils.hexStripZeros(chainId);
-
-      let accounts = await metamask.request({ method: 'eth_requestAccounts', params: [] });
+      let accounts = await window.ethereum.request({ method: 'eth_requestAccounts', params: [] });
       if (accounts && accounts.length > 0) {
         this.account = accounts[0];
         try {
-          await metamask.request({ 
+          await window.ethereum.request({
             method: 'wallet_switchEthereumChain', 
             params: [{ chainId: chainId }] 
           });
         } catch (err) {
-          await metamask.request({ 
+          console.log({
+            chainId: chainId,
+            chainName: 'Fhenix Network New',
+            rpcUrls: [appConfig.RPC_DEFAULT_ENDPOINT],
+            nativeCurrency: {
+              name: "FHE Token",
+              symbol: "tFHE",
+              decimals: 18
+            },
+            blockExplorerUrls: [appConfig.BLOCK_EXPLORER]
+          })
+          await window.ethereum.request({ 
             method: 'wallet_addEthereumChain', 
             params: [
             {
@@ -228,10 +238,8 @@ export default defineComponent({
         }
         browserProvider = new ethers.BrowserProvider(window.ethereum!)
         web3Signer = await browserProvider.getSigner();
-
         this.fheClient = new FhenixClient({ provider: browserProvider });
-
-        metamask.on('accountsChanged', async (accounts: any) => {
+        window.ethereum.on('accountsChanged', async (accounts: any) => {
           console.log("accountsChanged");
           this.account = accounts[0];
           this.balance = await this.getTokenBalance();
@@ -241,7 +249,6 @@ export default defineComponent({
 
         window.localStorage.setItem('connectedBefore', '1');
         this.getWalletBalance();
-
         this.loadContract();
       }
     },
