@@ -1,0 +1,9 @@
+
+{
+  "ENC_ERC20_CONTRACT": "0xB23e11F0016d8a16448A9dcB64F7a216c75003D7",
+  "NON_ENC_ERC20_CONTRACT": "0xB23e11F0016d8a16448A9dcB64F7a216c75003D7",
+  "RPC_DEFAULT_ENDPOINT": "https://api.testnet.fhenix.zone:7747",
+  "FAUCET_ENDPOINT": "https://faucet-api.fhenix.zone",
+  "BLOCK_EXPLORER": "https://explorer.testnet.fhenix.zone",
+  "CHAIN_ID": 42069
+}
