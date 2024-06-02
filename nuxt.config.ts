@@ -1,5 +1,15 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
+  runtimeConfig: {
+    public: {
+      ENC_ERC20_CONTRACT: process.env.NUXT_ENV_ENC_ERC20_CONTRACT || "0xDF480adD66493C803e829b09651BeA1F68853A23",
+      NON_ENC_ERC20_CONTRACT: process.env.NUXT_ENV_NON_ENC_ERC20_CONTRACT || "0xDF480adD66493C803e829b09651BeA1F68853A23",
+      CHAIN_ID: process.env.NUXT_ENV_NETWORK_CHAIN_ID || "8008135",
+      RPC_DEFAULT_ENDPOINT: process.env.NUXT_ENV_NETWORK_RPC_URL || "https://api.helium.fhenix.zone",
+      BLOCK_EXPLORER: process.env.NUXT_ENV_NETWORK_EXPLORER_URL || "https://explorer.helium.fhenix.zone",
+      FAUCET_ENDPOINT: process.env.NUXT_ENV_FAUCET_API || "https://faucet-api.helium.fhenix.zone",
+    },
+  },
   ssr: false,
   devServer: {
     port: 2222,

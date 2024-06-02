@@ -9,7 +9,7 @@ import globalMixin from '../mixins/globalMixin';
 import { ethers } from "ethers";
 
 import ABI from '../assets/erc20.json';
-import appConfig from '../config/appConfig.json'
+//import appConfig from '../config/appConfig.json'
 
 import encryptionOn from '../assets/lottie/encryption-on.json'
 import audioFile from '~/assets/audio/encryption-on.mp3'
@@ -22,6 +22,8 @@ var browserProvider: ethers.BrowserProvider;
 var web3Signer: ethers.JsonRpcSigner;
 var mmsdk: MetaMaskSDK;
 var metamask: any;
+
+const config = useRuntimeConfig();
 
 const fromHexString = (hexString: string): Uint8Array => {
   const arr = hexString.replace(/^(0x)/, '').match(/.{1,2}/g);
@@ -62,7 +64,7 @@ export default defineComponent({
     ];
     
     return {
-      mmDeepLink: "https://demo.fhenix.zone",
+      mmDeepLink: "https://demo.helium.fhenix.zone",
       enableEncryption: false,
       encryptionOn: encryptionOn,
       showEncryptionAnimation: false,
@@ -72,13 +74,14 @@ export default defineComponent({
       balance: -1 as number,
       walletBalance: 0,
       walletBalanceChecking: false,
+      faucetError: "",
       recipientAddress: "",
       loadingContract: false,
       minting: false,
       info: "", 
       showSend: false,
       transferring: false,
-      explorer: appConfig.BLOCK_EXPLORER,
+      explorer: config.public.BLOCK_EXPLORER,
       showEncryptionInfo: true,
        
       amountRules,
@@ -95,7 +98,7 @@ export default defineComponent({
 
   created() {
     console.log(`Created!`);
-    console.log(appConfig);
+    console.log(config.public);
   },
   mounted() {
     var self = this;
@@ -158,7 +161,7 @@ export default defineComponent({
     },
 
     contractAddress() {
-      return this.enableEncryption ? appConfig.ENC_ERC20_CONTRACT : appConfig.NON_ENC_ERC20_CONTRACT;
+      return this.enableEncryption ? config.public.ENC_ERC20_CONTRACT : config.public.NON_ENC_ERC20_CONTRACT;
     },
     colorScheme() {
       return {
@@ -188,7 +191,7 @@ export default defineComponent({
   },
   methods: {
     openExplorer(tx: string) {
-      window.open(this.explorer + '/tx/' + tx + '/raw-trace', "_blank");
+      window.open(this.explorer + '/tx/' + tx, "_blank");
     },
     shortAddress(address: string) {
       if (address !== undefined && address !== "") {
@@ -197,7 +200,7 @@ export default defineComponent({
       return "";
     },    
     async connect() {
-      let chainId = '0x' + (Number(appConfig.CHAIN_ID)).toString(16);
+      let chainId = '0x' + (Number(config.public.CHAIN_ID)).toString(16);
       //chainId = ethers.utils.hexStripZeros(chainId);
       let accounts = await window.ethereum.request({ method: 'eth_requestAccounts', params: [] });
       if (accounts && accounts.length > 0) {
@@ -208,30 +211,19 @@ export default defineComponent({
             params: [{ chainId: chainId }] 
           });
         } catch (err) {
-          console.log({
-            chainId: chainId,
-            chainName: 'Fhenix Network New',
-            rpcUrls: [appConfig.RPC_DEFAULT_ENDPOINT],
-            nativeCurrency: {
-              name: "FHE Token",
-              symbol: "tFHE",
-              decimals: 18
-            },
-            blockExplorerUrls: [appConfig.BLOCK_EXPLORER]
-          })
           await window.ethereum.request({ 
             method: 'wallet_addEthereumChain', 
             params: [
             {
                 chainId: chainId,
-                chainName: 'Fhenix Network New',
-                rpcUrls: [appConfig.RPC_DEFAULT_ENDPOINT],
+                chainName: 'Fhenix Helium',
+                rpcUrls: [config.public.RPC_DEFAULT_ENDPOINT],
                 nativeCurrency: {
                   name: "FHE Token",
-                  symbol: "tFHE",
+                  symbol: "tETH",
                   decimals: 18
                 },
-                blockExplorerUrls: [appConfig.BLOCK_EXPLORER]
+                blockExplorerUrls: [config.public.BLOCK_EXPLORER]
               }
             ] 
           }); 
@@ -358,6 +350,7 @@ export default defineComponent({
     async requestCoinsFromFaucet() {
       var self = this;
       this.usingFaucet = true;
+      this.faucetError = "";
       var myCurrentBalance = this.walletBalance;
       let answer = await this.getCoins(this.account);
       if (answer.result === "success") {
@@ -377,6 +370,7 @@ export default defineComponent({
         checkBalance();
       } else {
         self.usingFaucet = false;
+        this.faucetError = answer.reason;
 
         // error here
       }

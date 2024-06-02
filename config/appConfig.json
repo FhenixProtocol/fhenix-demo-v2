@@ -1,9 +1,9 @@
 
 {
-  "ENC_ERC20_CONTRACT": "0xB23e11F0016d8a16448A9dcB64F7a216c75003D7",
-  "NON_ENC_ERC20_CONTRACT": "0xB23e11F0016d8a16448A9dcB64F7a216c75003D7",
-  "RPC_DEFAULT_ENDPOINT": "https://api.testnet.fhenix.zone:7747",
-  "FAUCET_ENDPOINT": "https://faucet-api.fhenix.zone",
-  "BLOCK_EXPLORER": "https://explorer.testnet.fhenix.zone",
-  "CHAIN_ID": 42069
+  "ENC_ERC20_CONTRACT": "0xDF480adD66493C803e829b09651BeA1F68853A23",
+  "NON_ENC_ERC20_CONTRACT": "0xDF480adD66493C803e829b09651BeA1F68853A23",
+  "RPC_DEFAULT_ENDPOINT": "https://api.helium.fhenix.zone",
+  "FAUCET_ENDPOINT": "https://faucet-api.helium.fhenix.zone",
+  "BLOCK_EXPLORER": "https://explorer.helium.fhenix.zone/",
+  "CHAIN_ID": 8008135
 }

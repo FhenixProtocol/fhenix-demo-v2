@@ -275,7 +275,7 @@ export default defineComponent({
           <div class="contract-box">Contract: {{  shortAddress(contractAddress) }}</div>
           <div class="info-box" :style="infoBoxAnimatedStyle" >
             <div>
-              <div style="margin-bottom: 0px;">balance: {{  balance !== -1 ? balance : "unknown"  }} {{ enableEncryption ? 'FHET' : 'TKN' }}</div>
+              <div style="margin-bottom: 0px;">balance: {{  balance !== -1 ? balance : "unknown"  }} {{ enableEncryption ? 'tFHE' : 'TKN' }}</div>
               {{ info }}
             </div>
             <div v-if="showProgress" style="position: absolute; left: 15px; bottom: 0px; width: calc(100% - 30px); height: 3px">
@@ -299,6 +299,7 @@ export default defineComponent({
         <div v-if="isConnected && walletBalance < 50" style="text-align: center">
           <div><v-btn class="btn" :class="showLowTokenWarning && !(usingFaucet || walletBalanceChecking) ? 'button-focus-animation' : ''" :loading="usingFaucet || walletBalanceChecking" color="#FC4A1A" rounded @click="requestCoinsFromFaucet()" :disabled="account === '' || usingFaucet || walletBalanceChecking || walletBalance > 50" style="margin-top: 10px">Get Coins</v-btn></div>
           <div style="font-size: 12px; margin-top: 0px">Get some coins to interact with the chain</div>
+          <div v-if="faucetError != ''" style="font-size: 12px; color: orange; margin-top: 5px">Error: {{ faucetError }}</div>
         </div>
 
         <div v-if="walletBalance > 0" style="display: flex; gap: 10px; margin-top: 20px">

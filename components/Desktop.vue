@@ -85,7 +85,6 @@ export default defineComponent({
       </div>
       
       <div style="height: 120px;"></div> <!-- spacer -->
-      
       <v-btn class="btn connect-wallet" :class="isConnected ? 'connected-wallet' : 'connect-wallet-animate'" color="#FC4A1A" rounded @click="connect">
         <template v-slot:prepend>
           <div style="height: 24px; width: 24px"><img src="~/assets/metamask.logo.svg" /></div>
@@ -97,7 +96,7 @@ export default defineComponent({
 
       <div v-if="isConnected" class="account-info">
         <div>Account: <span style="font-family: monospace">{{ shortAddress(account) }}</span></div>
-        <div style="margin-bottom: 0px;">Balance: <span style="font-family: monospace;  font-weight: bold">{{  walletBalanceChecking ? "refreshing..." :  walletBalance.toFixed(3) }}</span> <span v-if="!walletBalanceChecking" style="font-family: monospace">tFHE</span></div>
+        <div style="margin-bottom: 0px;">Balance: <span style="font-family: monospace;  font-weight: bold">{{  walletBalanceChecking ? "refreshing..." :  walletBalance.toFixed(3) }}</span> <span v-if="!walletBalanceChecking" style="font-family: monospace">tETH</span></div>
         <v-btn class="btn" :class="showLowTokenWarning && !(usingFaucet || walletBalanceChecking) ? 'button-focus-animation' : ''" :loading="usingFaucet || walletBalanceChecking" color="primary" rounded @click="requestCoinsFromFaucet()" :disabled="account === '' || usingFaucet || walletBalanceChecking || walletBalance > 0.5" style="margin-top: 10px">
           <template v-slot:default>
             <!-- <v-tooltip activator="parent" location="bottom">Get coins from the faucet if you to allow execute transactions</v-tooltip> -->
@@ -105,6 +104,8 @@ export default defineComponent({
           </template>
         </v-btn>
         <div v-if="showLowTokenWarning" style="font-size: 11px">You need more coins to make transactions</div>
+        <div v-if="faucetError != ''" style="font-size: 12px; color: orange; margin-top: 5px">Error: {{ faucetError }}</div>
+        
 
       </div>
         
@@ -169,7 +170,7 @@ export default defineComponent({
           <div style="width: 100%; height: 1px; background-color: rgba(255, 255, 255, 0.171);"></div>
         
           <div style="margin-top: 10px; width: 100%; flex-grow: 1; position: relative; overflow: hidden;">
-            <div>Contract Balance: {{ balance }} {{ enableEncryption ? 'FHET' : 'TKN' }}</div>
+            <div>Contract Balance: {{ balance }} {{ enableEncryption ? 'tFHE' : 'TKN' }}</div>
             <transition name="fade">
               <div class="lock-container" v-if="enableEncryption && showEncryptionAnimation">
                 <audio ref="audioPlayer" :src="audioSource" />
