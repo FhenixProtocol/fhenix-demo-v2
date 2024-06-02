@@ -303,7 +303,7 @@ export default defineComponent({
         </div>
 
         <div v-if="walletBalance > 0" style="display: flex; gap: 10px; margin-top: 20px">
-          <v-btn :disabled="balance < 1 || showLowTokenWarning || transferring || minting" :loading="transferring" color="primary" rounded style="" @click="showSend = true">
+          <v-btn :disabled="balance < 1 || showLowTokenWarning || transferring || minting || wrapping" :loading="transferring" color="primary" rounded style="" @click="showSend = true">
             Send
           </v-btn>
           <v-btn :class="balance < 1 && !minting ? (enableEncryption ? 'button-focus-animation-enc' : 'button-focus-animation') : ''" :disabled="showLowTokenWarning || minting || transferring" :loading="minting" color="primary" rounded style="" @click="mintToken(10)">Mint 10 Tokens</v-btn>

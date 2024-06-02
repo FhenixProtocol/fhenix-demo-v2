@@ -207,7 +207,7 @@ export default defineComponent({
                     <div style="display: flex; gap: 10px">
                       <v-text-field :rules="recipientRules" ref="recipient" style="flex-grow: 2;" density="compact" label="Send To"></v-text-field>
                       <v-text-field :rules="amountRules" ref="amount" variant="filled" style="flex-grow: 1;" density="compact" label="Amount"></v-text-field>
-                      <v-btn :disabled="transferring || minting" :loading="transferring" color="primary" rounded style="" @click="sendTokens()">
+                      <v-btn :disabled="wrapping || transferring || minting" :loading="transferring" color="primary" rounded style="" @click="sendTokens()">
                         Send
                       </v-btn>
                     </div>
@@ -215,7 +215,7 @@ export default defineComponent({
                     <div style="font-weight: bold; font-size: 16px">{{ enableEncryption ? "Unwrap" : "Wrap" }} Tokens: <span style="font-size: 10px; font-weight: normal">(convert to {{ enableEncryption ? "non-encrypted" : "encrypted" }} token)</span></div>
                     <div style="display: flex; gap: 10px">
                       <v-text-field :rules="amountRules" ref="wrapAmount" variant="filled" style="flex-grow: 1;" density="compact" label="Amount"></v-text-field>
-                      <v-btn :disabled="transferring || minting || balance <= 0" :loading="transferring" color="primary" rounded style="" @click="wrapTokens()">
+                      <v-btn :disabled="wrapping || transferring || minting || balance <= 0" :loading="wrapping" color="primary" rounded style="" @click="wrapTokens()">
                         {{ enableEncryption ? "Unwrap" : "Wrap" }}
                       </v-btn>
                     </div>

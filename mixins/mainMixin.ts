@@ -81,6 +81,7 @@ export default defineComponent({
       info: "", 
       showSend: false,
       transferring: false,
+      wrapping: false,
       explorer: config.public.BLOCK_EXPLORER,
       showEncryptionInfo: true,
        
@@ -500,8 +501,9 @@ export default defineComponent({
             
       if (this.activeContract !== null) {
         try {
+          this.wrapping = true;
           this.info = `Token ${wrappingText}ping; Waiting for confirmation...`;
-          console.log(`Token ${wrappingText}ping...`);
+          console.log(`${amount} Token ${wrappingText}ping...`);
           
           var tx =  (this.enableEncryption ? await this.activeContract.unwrap(amount) : await this.activeContract.wrap(amount) );
           
@@ -516,14 +518,14 @@ export default defineComponent({
             console.log(tx);            
             tx.wait().then(async (receipt: null | ethers.TransactionReceipt) => {
               this.updateStatus(tx.hash, "Success");
-              this.transferring = false;
+              this.wrapping = false;
               console.log(`${wrappingText}ping Successful!`);
               console.log(receipt);
               this.info = "";
               this.balance = await this.getTokenBalance();
             }).catch((err: any) => {
               this.updateStatus(tx.hash, "Failed");
-              this.transferring = false;
+              this.wrapping = false;
               console.log("handleClick Error: ", err)
               console.log(`${wrappingText}ping Failed!`);
               this.info = `${wrappingText}ping Failed!`;
@@ -538,7 +540,7 @@ export default defineComponent({
           this.getWalletBalance();   
         } catch (err) {
           console.log(err);
-          this.transferring = false;
+          this.wrapping = false;
           this.info = `Error: ${wrappingText}ping failed!`;
         }
       }
