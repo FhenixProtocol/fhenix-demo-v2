@@ -24,7 +24,7 @@ export default defineComponent({
     };
   },
   methods: {
-    async getFHETokenBalance(provider: ethers.BrowserProvider, address: string) : Promise<number> {
+    async getFHETokenBalance(provider: ethers.BrowserProvider, address: string) : Promise<string> {
       try {
         if (this.fheClient !== null && this.activeContract !== null) {
           let permit = await getPermit(config.public.ENC_ERC20_CONTRACT, provider);
@@ -32,13 +32,13 @@ export default defineComponent({
          
           const encryptedBalance = await this.activeContract.balanceOfEncrypted(address, this.fheClient.extractPermitPermission(permit));
           const balance = this.fheClient.unseal(config.public.ENC_ERC20_CONTRACT, encryptedBalance).toString();
-          return Number(balance);
+          return ethers.formatEther(balance);
   
         }
       } catch (err) {
         console.log(err);
       }
-      return 0;
+      return "0";
     }, 
 
     async getCoins(address: string): Promise<any> {

@@ -288,20 +288,20 @@ export default defineComponent({
           if (this.enableEncryption) {
             this.info = "Minting; Encrypting amount...";
             console.log("Encrypting...");
-            let mintAmount = (await this.fheClient.encrypt_uint32(amount)).data;
+            let mintAmount = (await this.fheClient.encrypt_uint128(ethers.parseEther(amount + ""))).data;
             console.log("=== mintAmount ===")
             console.log(typeof mintAmount);
             console.log(mintAmount);
             console.log("=== mintAmount ===")
             this.info = "Minting; Sending transaction...";
             
-            const inEuint32Amount = {
+            const inEuint128Amount = {
               data: `0x${Array.from(mintAmount).map(b => b.toString(16).padStart(2, '0')).join('')}`
             }
-            console.log("--- inEuint32Amount ---")
-            console.log(inEuint32Amount);
-            console.log("--- inEuint32Amount ---")
-            tx = await this.activeContract.mintEncrypted(inEuint32Amount);
+            console.log("--- inEuint128Amount ---")
+            console.log(inEuint128Amount);
+            console.log("--- inEuint128Amount ---")
+            tx = await this.activeContract.mintEncrypted(inEuint128Amount);
           } else {
             this.info = "Minting; Sending transaction...";
             tx = await this.activeContract.mint(amount);
@@ -349,32 +349,33 @@ export default defineComponent({
     },
 
     async requestCoinsFromFaucet() {
-      var self = this;
-      this.usingFaucet = true;
-      this.faucetError = "";
-      var myCurrentBalance = this.walletBalance;
-      let answer = await this.getCoins(this.account);
-      if (answer.result === "success") {
-        const checkBalance = async () => {
-          await self.getWalletBalance();
-          if (myCurrentBalance == self.walletBalance) {
-            setTimeout(()=> {
-              console.log("Checking balance...");
-              checkBalance();
-            }, 1000);
-          } else {
-            self.walletBalanceChecking = false;
-          }
-        }
-        self.usingFaucet = false;
-        self.walletBalanceChecking = true;
-        checkBalance();
-      } else {
-        self.usingFaucet = false;
-        this.faucetError = answer.reason;
+      window.open("http://get-helium.fhenix.zone", "_blank");
+      // var self = this;
+      // this.usingFaucet = true;
+      // this.faucetError = "";
+      // var myCurrentBalance = this.walletBalance;
+      // let answer = await this.getCoins(this.account);
+      // if (answer.result === "success") {
+      //   const checkBalance = async () => {
+      //     await self.getWalletBalance();
+      //     if (myCurrentBalance == self.walletBalance) {
+      //       setTimeout(()=> {
+      //         console.log("Checking balance...");
+      //         checkBalance();
+      //       }, 1000);
+      //     } else {
+      //       self.walletBalanceChecking = false;
+      //     }
+      //   }
+      //   self.usingFaucet = false;
+      //   self.walletBalanceChecking = true;
+      //   checkBalance();
+      // } else {
+      //   self.usingFaucet = false;
+      //   this.faucetError = answer.reason;
 
-        // error here
-      }
+      //   // error here
+      // }
     },
 
     async getTokenBalance(): Promise<number> {
@@ -388,7 +389,7 @@ export default defineComponent({
       try {
         this.info = "Querying balance from contract..."
         if (this.enableEncryption) {
-          balance = await this.getFHETokenBalance(browserProvider, this.account);
+          balance = parseFloat(await this.getFHETokenBalance(browserProvider, this.account));
         } else {
           let result = await this.activeContract.balanceOf(this.account);
           balance = parseFloat(result);
@@ -446,13 +447,14 @@ export default defineComponent({
             console.log("Encrypting amount...");
             console.log(typeof amount);
             console.log(amount);
-            let sendAmount = (await this.fheClient.encrypt_uint32(amount)).data;
-            const inEuint32Amount = {
+            let sendAmount = (await this.fheClient.encrypt_uint128(ethers.parseEther(amount + ""))).data;
+            const inEuint128Amount = {
               data: `0x${Array.from(sendAmount).map(b => b.toString(16).padStart(2, '0')).join('')}`
             }
             this.info = "Token Transfer; Sending transaction...";
             console.log("Token Transfer; Sending transaction...");
-            tx = await this.activeContract.transferEncrypted(recipient, inEuint32Amount);
+            console.log(recipient);
+            tx = await this.activeContract.transferEncrypted(recipient, inEuint128Amount);
           } else {
             this.info = "Token Transfer; Sending transaction...";
             tx = await this.activeContract.transfer(recipient, amount);
