@@ -64,7 +64,7 @@ export default defineComponent({
     ];
     
     return {
-      mmDeepLink: "https://demo.helium.fhenix.zone",
+      mmDeepLink: "https://metamask.app.link/dapp/demo.helium.fhenix.zone",
       enableEncryption: false,
       encryptionOn: encryptionOn,
       showEncryptionAnimation: false,
@@ -454,7 +454,7 @@ export default defineComponent({
             this.info = "Token Transfer; Sending transaction...";
             console.log("Token Transfer; Sending transaction...");
             console.log(recipient);
-            tx = await this.activeContract.transferEncrypted(recipient, inEuint128Amount);
+            tx = await this.activeContract['transferEncrypted(address,(bytes))'](recipient, inEuint128Amount);
           } else {
             this.info = "Token Transfer; Sending transaction...";
             tx = await this.activeContract.transfer(recipient, amount);
